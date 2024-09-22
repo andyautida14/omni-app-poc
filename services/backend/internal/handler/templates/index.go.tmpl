@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <h1>Users</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{range .}}
+                    {{template "user.go.tmpl" .}}
+                {{end}}
+            </tbody>
+        </table>
+    </body>
+</html>
