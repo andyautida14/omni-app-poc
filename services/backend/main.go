@@ -22,7 +22,9 @@ func main() {
 
 	mux := http.NewServeMux()
 	mux.Handle("/", indexH)
+	mux.Handle("/users", usersH)
 	mux.Handle("/users/", usersH)
 	mux.Handle("/users/{id}", userH)
+	mux.Handle("/users/{id}/", userH)
 	http.ListenAndServe(":1337", mux)
 }
