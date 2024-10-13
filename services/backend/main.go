@@ -1,16 +1,11 @@
 package main
 
 import (
-	"embed"
-	"io/fs"
 	"net/http"
 
 	"github.com/andyautida/omni-app-poc/services/backend/internal/ds"
 	"github.com/andyautida/omni-app-poc/services/backend/internal/handler"
 )
-
-//go:embed static/*
-var staticDir embed.FS
 
 func main() {
 	users := []ds.User{
@@ -18,20 +13,19 @@ func main() {
 	}
 	store := ds.CreateUserDatastore(users)
 
-	staticFiles, err := fs.Sub(staticDir, "static")
+	usersH := handler.NewUsersHandler(store)
+	userH := handler.NewUserHandler(store)
+
+	staticH, err := handler.NewStaticFilesHandler()
 	if err != nil {
 		panic(err)
 	}
-	fs := http.FileServer(http.FS(staticFiles))
-
-	usersH := handler.NewUsersHandler(store)
-	userH := handler.NewUserHandler(store)
 
 	mux := http.NewServeMux()
 	mux.Handle("/users", usersH)
 	mux.Handle("/users/", usersH)
 	mux.Handle("/users/{id}", userH)
 	mux.Handle("/users/{id}/", userH)
-	mux.Handle("/", fs)
+	mux.Handle("/", staticH)
 	http.ListenAndServe(":1337", mux)
 }
