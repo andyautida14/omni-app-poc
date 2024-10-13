@@ -14,7 +14,7 @@ type userHandler struct {
 func (h *userHandler) getUser(w http.ResponseWriter, r *http.Request) {
 	id := r.PathValue("id")
 	if id == "" {
-		HandleNotFound(w, r)
+		handleNotFound(w, r)
 		return
 	}
 
@@ -27,7 +27,7 @@ func (h *userHandler) getUser(w http.ResponseWriter, r *http.Request) {
 
 	jsonBytes, err := json.Marshal(u)
 	if err != nil {
-		HandleInternalServerError(w, r)
+		handleInternalServerError(w, r)
 		return
 	}
 

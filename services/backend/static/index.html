@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Students Information Portal</title>
+        <script
+            src="https://unpkg.com/htmx.org@2.0.3"
+            integrity="sha384-0895/pl2MU10Hqc6jd4RvrthNlDiE9U1tWmX7WRESftEDRosgxNsQG/Ze9YMRzHq"
+            crossorigin="anonymous"
+        ></script>
+    </head>
+    <body>
+        <h1>Users</h1>
+        <div hx-get="/users" hx-trigger="load">
+            <p class="htmx-indicator">Loading...</p>
+        </div>
+    </body>
+</html>

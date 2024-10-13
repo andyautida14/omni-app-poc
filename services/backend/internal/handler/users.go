@@ -3,6 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"net/http"
+	"time"
 
 	"github.com/andyautida/omni-app-poc/services/backend/internal/ds"
 )
@@ -14,7 +15,7 @@ type usersHandler struct {
 func (h *usersHandler) createUser(w http.ResponseWriter, r *http.Request) {
 	var u ds.User
 	if err := json.NewDecoder(r.Body).Decode(&u); err != nil {
-		HandleInternalServerError(w, r)
+		handleInternalServerError(w, r)
 		return
 	}
 
@@ -22,7 +23,7 @@ func (h *usersHandler) createUser(w http.ResponseWriter, r *http.Request) {
 
 	jsonBytes, err := json.Marshal(u)
 	if err != nil {
-		HandleInternalServerError(w, r)
+		handleInternalServerError(w, r)
 		return
 	}
 
@@ -31,14 +32,16 @@ func (h *usersHandler) createUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *usersHandler) listUsers(w http.ResponseWriter, r *http.Request) {
+	time.Sleep(3 * time.Second)
 	users := h.store.GetAll()
-	jsonBytes, err := json.Marshal(users)
+	tmpl, err := getTemplates()
 	if err != nil {
-		HandleInternalServerError(w, r)
+		handleInternalServerError(w, r)
 		return
 	}
-	w.WriteHeader(http.StatusOK)
-	w.Write(jsonBytes)
+
+	w.Header().Set("Content-type", "text/html")
+	tmpl.ExecuteTemplate(w, "users.go.tmpl", users)
 }
 
 func (h *usersHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
