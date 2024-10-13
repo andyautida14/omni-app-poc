@@ -16,7 +16,7 @@ func main() {
 	usersH := handler.NewUsersHandler(store)
 	userH := handler.NewUserHandler(store)
 
-	staticH, err := handler.NewStaticFilesHandler()
+	staticH, err := handler.NewStaticFilesHandler(false)
 	if err != nil {
 		panic(err)
 	}
