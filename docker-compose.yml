@@ -1,0 +1,36 @@
+version: "3"
+services:
+  customer_service_db:
+    image: postgres:16.4-alpine3.20
+    environment:
+      - POSTGRES_USER=customer-service-user
+      - POSTGRES_PASSWORD=customer-service-password
+      - POSTGRES_DB=customer_service
+    ports:
+      - 5432:5432
+    volumes:
+      - customer-service-db:/var/llib/postgresql/data
+    healthcheck:
+      test: pg_isready -U customer-service-user -d customer_service
+      interval: 5s
+      timeout: 30s
+      retries: 5
+      start_period: 1s
+  customer_service:
+    build: ./services/backend
+    environment:
+      - DB_URL=postgres://customer-service-user:customer-service-password@customer_service_db:5432/customer_service
+    ports:
+      - 1337:1337
+    healthcheck:
+      test: curl --fail http://localhost:3000/healthcheck || exit 1
+      interval: 5s
+      timeout: 30s
+      retries: 5
+      start_period: 1s
+    depends_on:
+      customer_service_db:
+        condition: service_healthy
+
+volumes:
+  customer-service-db:

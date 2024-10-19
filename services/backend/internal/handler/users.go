@@ -3,7 +3,6 @@ package handler
 import (
 	"encoding/json"
 	"net/http"
-	"time"
 
 	"github.com/andyautida/omni-app-poc/services/backend/internal/ds"
 )
@@ -32,7 +31,6 @@ func (h *usersHandler) createUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *usersHandler) listUsers(w http.ResponseWriter, r *http.Request) {
-	time.Sleep(3 * time.Second)
 	users := h.store.GetAll()
 	tmpl, err := getTemplates()
 	if err != nil {
@@ -45,13 +43,13 @@ func (h *usersHandler) listUsers(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *usersHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-type", "application/json")
 	switch {
 	case r.Method == http.MethodGet:
 		h.listUsers(w, r)
 	case r.Method == http.MethodPost:
 		h.createUser(w, r)
-		return
+	default:
+		handleNotFound(w, r)
 	}
 }
 
