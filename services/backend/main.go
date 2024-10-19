@@ -2,16 +2,23 @@ package main
 
 import (
 	"context"
+	"embed"
 	"log"
 	"net/http"
 
 	"github.com/andyautida/omni-app-poc/services/backend/internal/ds"
 	"github.com/andyautida/omni-app-poc/services/backend/internal/handler"
 	"github.com/gocraft/dbr/v2"
+	"github.com/golang-migrate/migrate/v4"
+	"github.com/golang-migrate/migrate/v4/database/postgres"
+	"github.com/golang-migrate/migrate/v4/source/iofs"
 	"github.com/sethvargo/go-envconfig"
 
 	_ "github.com/lib/pq"
 )
+
+//go:embed migrations/*
+var migrationsDir embed.FS
 
 type ServiceConfig struct {
 	DbDriver string `env:"DB_DRIVER, default=postgres"`
@@ -28,6 +35,25 @@ func main() {
 
 	conn, err := dbr.Open(c.DbDriver, c.DbUrl, nil)
 	if err != nil {
+		log.Fatal(err)
+	}
+
+	migrationSource, err := iofs.New(migrationsDir, "migrations")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	driver, err := postgres.WithInstance(conn.DB, &postgres.Config{})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	m, err := migrate.NewWithInstance("iofs", migrationSource, "customer_service", driver)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if err := m.Up(); err != nil && err != migrate.ErrNoChange {
 		log.Fatal(err)
 	}
 

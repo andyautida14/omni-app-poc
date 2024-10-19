@@ -8,6 +8,10 @@
     <tbody>
         {{range .}}
             {{template "customer.go.tmpl" .}}
+            {{else}}
+            <tr colspan="2">
+                <td>No customers saved.</td>
+            </tr>
         {{end}}
     </tbody>
 </table>

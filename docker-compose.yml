@@ -1,4 +1,3 @@
-version: "3"
 services:
   customer_service_db:
     image: postgres:16.4-alpine3.20
@@ -19,7 +18,7 @@ services:
   customer_service:
     build: ./services/backend
     environment:
-      - DB_URL=postgres://customer-service-user:customer-service-password@customer_service_db:5432/customer_service
+      - DB_URL=postgres://customer-service-user:customer-service-password@customer_service_db:5432/customer_service?sslmode=disable
     ports:
       - 1337:1337
     healthcheck:
