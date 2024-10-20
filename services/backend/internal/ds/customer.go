@@ -15,7 +15,7 @@ type CustomerDatastore interface {
 }
 
 type customerDatastore struct {
-	session dbr.Session
+	session *dbr.Session
 }
 
 func (ds *customerDatastore) Create(c Customer) error {
@@ -30,6 +30,6 @@ func (ds *customerDatastore) GetAll() ([]Customer, error) {
 	return []Customer{}, nil
 }
 
-func NewCustomerDS(conn dbr.Connection) CustomerDatastore {
-	return &customerDatastore{session: *conn.NewSession(nil)}
+func NewCustomerDS(session *dbr.Session) CustomerDatastore {
+	return &customerDatastore{session: session}
 }
