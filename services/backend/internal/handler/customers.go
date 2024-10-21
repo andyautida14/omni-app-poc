@@ -15,12 +15,12 @@ type customersHandler struct {
 func (h *customersHandler) createCustomer(w http.ResponseWriter, r *http.Request) {
 	var c ds.Customer
 	if err := json.NewDecoder(r.Body).Decode(&c); err != nil {
-		handleInternalServerError(w, r)
+		handleInternalServerError(w, r, err)
 		return
 	}
 
-	if err := h.dataStore.Create(c); err != nil {
-		handleInternalServerError(w, r)
+	if err := h.dataStore.Create(&c); err != nil {
+		handleInternalServerError(w, r, err)
 		return
 	}
 
@@ -30,13 +30,13 @@ func (h *customersHandler) createCustomer(w http.ResponseWriter, r *http.Request
 func (h *customersHandler) listCustomers(w http.ResponseWriter, r *http.Request) {
 	tmpl, err := h.tmplStore.GetTemplates()
 	if err != nil {
-		handleInternalServerError(w, r)
+		handleInternalServerError(w, r, err)
 		return
 	}
 
 	customers, err := h.dataStore.GetAll()
 	if err != nil {
-		handleInternalServerError(w, r)
+		handleInternalServerError(w, r, err)
 		return
 	}
 

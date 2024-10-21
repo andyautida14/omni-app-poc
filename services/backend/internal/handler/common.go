@@ -2,6 +2,7 @@ package handler
 
 import (
 	"html/template"
+	"log/slog"
 	"net/http"
 )
 
@@ -9,7 +10,8 @@ type TemplateStore interface {
 	GetTemplates() (*template.Template, error)
 }
 
-func handleInternalServerError(w http.ResponseWriter, _ *http.Request) {
+func handleInternalServerError(w http.ResponseWriter, _ *http.Request, err error) {
+	slog.Error("an unexpected error occured:", err)
 	w.WriteHeader(http.StatusInternalServerError)
 	w.Write([]byte("internal server error"))
 }
