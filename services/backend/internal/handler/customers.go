@@ -8,7 +8,8 @@ import (
 )
 
 type customersHandler struct {
-	store ds.CustomerDatastore
+	tmplStore TemplateStore
+	dataStore ds.CustomerDatastore
 }
 
 func (h *customersHandler) createCustomer(w http.ResponseWriter, r *http.Request) {
@@ -18,7 +19,7 @@ func (h *customersHandler) createCustomer(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	if err := h.store.Create(c); err != nil {
+	if err := h.dataStore.Create(c); err != nil {
 		handleInternalServerError(w, r)
 		return
 	}
@@ -27,13 +28,13 @@ func (h *customersHandler) createCustomer(w http.ResponseWriter, r *http.Request
 }
 
 func (h *customersHandler) listCustomers(w http.ResponseWriter, r *http.Request) {
-	customers, err := h.store.GetAll()
+	tmpl, err := h.tmplStore.GetTemplates()
 	if err != nil {
 		handleInternalServerError(w, r)
 		return
 	}
 
-	tmpl, err := getTemplates()
+	customers, err := h.dataStore.GetAll()
 	if err != nil {
 		handleInternalServerError(w, r)
 		return
@@ -54,6 +55,6 @@ func (h *customersHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func NewCustomersHandler(store ds.CustomerDatastore) http.Handler {
-	return &customersHandler{store: store}
+func NewCustomersHandler(tmplStore TemplateStore, dataStore ds.CustomerDatastore) http.Handler {
+	return &customersHandler{tmplStore: tmplStore, dataStore: dataStore}
 }

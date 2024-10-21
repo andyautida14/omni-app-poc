@@ -1,14 +1,13 @@
 package handler
 
 import (
-	"embed"
+	"html/template"
 	"net/http"
-	"text/template"
 )
 
-//go:embed templates/*.go.tmpl
-var embeddedTemplates embed.FS
-var parsedTemplates *template.Template
+type TemplateStore interface {
+	GetTemplates() (*template.Template, error)
+}
 
 func handleInternalServerError(w http.ResponseWriter, _ *http.Request) {
 	w.WriteHeader(http.StatusInternalServerError)
@@ -18,13 +17,4 @@ func handleInternalServerError(w http.ResponseWriter, _ *http.Request) {
 func handleNotFound(w http.ResponseWriter, _ *http.Request) {
 	w.WriteHeader(http.StatusNotFound)
 	w.Write([]byte("not found"))
-}
-
-func getTemplates() (*template.Template, error) {
-	tmpl, err := template.ParseFS(embeddedTemplates, "templates/*")
-	if err != nil {
-		return nil, err
-	}
-	parsedTemplates = tmpl
-	return parsedTemplates, nil
 }

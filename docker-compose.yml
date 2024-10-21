@@ -19,6 +19,11 @@ services:
     build: ./services/backend
     environment:
       - DB_URL=postgres://customer-service-user:customer-service-password@customer_service_db:5432/customer_service?sslmode=disable
+      - STATIC_PATH=/var/srv/static
+      - TEMPLATE_PATH=/var/srv/templates
+    volumes:
+      - ./services/backend/static:/var/srv/static
+      - ./services/backend/templates:/var/srv/templates
     ports:
       - 1337:1337
     healthcheck:

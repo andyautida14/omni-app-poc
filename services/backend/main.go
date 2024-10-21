@@ -28,10 +28,12 @@ func main() {
 		log.Fatal(err)
 	}
 
-	customerStore := ds.NewCustomerDS(conn.NewSession(nil))
-	customersH := handler.NewCustomersHandler(customerStore)
+	tmplStore := newTmplStore(c.TemplatePath)
 
-	staticH, err := handler.NewStaticFilesHandler(true)
+	customerStore := ds.NewCustomerDS(conn.NewSession(nil))
+	customersH := handler.NewCustomersHandler(tmplStore, customerStore)
+
+	staticRootFs, err := getStaticRootFs(c.StaticPath)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -42,6 +44,6 @@ func main() {
 	})
 	mux.Handle("/customers", customersH)
 	mux.Handle("/customers/", customersH)
-	mux.Handle("/", staticH)
+	mux.Handle("/", http.FileServer(staticRootFs))
 	http.ListenAndServe(":1337", mux)
 }
