@@ -15,7 +15,7 @@ type tmplFs struct {
 	fs.FS
 }
 
-func (fs *tmplFs) ParseTemplates(names ...string) (*template.Template, error) {
+func (fs *tmplFs) ParseTemplates(names []string) (*template.Template, error) {
 	filenames := make([]string, len(names))
 	for i, name := range names {
 		filenames[i] = name + ".go.tmpl"

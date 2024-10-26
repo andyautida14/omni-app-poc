@@ -12,10 +12,10 @@ type homeHandler struct {
 }
 
 func (h *homeHandler) getHome(w http.ResponseWriter, r *http.Request) {
-	tmpl, err := h.tmplParser.ParseTemplates(
+	tmpl, err := h.tmplParser.ParseTemplates([]string{
 		"shell",
 		"customers",
-	)
+	})
 	if err != nil {
 		handleInternalServerError(w, r, err)
 		return
