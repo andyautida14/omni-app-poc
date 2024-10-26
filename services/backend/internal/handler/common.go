@@ -7,7 +7,7 @@ import (
 )
 
 type TemplateParser interface {
-	ParseTemplates([]string) (*template.Template, error)
+	ParseTemplates([]string, string) (*template.Template, error)
 }
 
 func handleInternalServerError(w http.ResponseWriter, _ *http.Request, err error) {

@@ -31,7 +31,7 @@ func main() {
 	customerStore := ds.NewCustomerDS(conn.NewSession(nil))
 	customersH := handler.NewCustomersHandler(customerStore)
 
-	tmplParser, err := newTmplFs(c.TemplatePath)
+	tmplParser, err := newTmplFs(c.TemplatePath, c.CacheTemplates)
 	if err != nil {
 		log.Fatal(err)
 	}

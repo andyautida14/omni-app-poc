@@ -15,7 +15,7 @@ func (h *homeHandler) getHome(w http.ResponseWriter, r *http.Request) {
 	tmpl, err := h.tmplParser.ParseTemplates([]string{
 		"shell",
 		"customers",
-	})
+	}, "get-home")
 	if err != nil {
 		handleInternalServerError(w, r, err)
 		return
