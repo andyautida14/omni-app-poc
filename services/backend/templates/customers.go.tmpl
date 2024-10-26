@@ -1,3 +1,5 @@
+{{define "main"}}
+<h2 class="uk-h2">Customers</h2>
 <table class="uk-table uk-table-hover">
     <thead>
         <tr>
@@ -7,11 +9,15 @@
     </thead>
     <tbody>
         {{range .}}
-            {{template "customer.go.tmpl" .}}
-            {{else}}
-            <tr colspan="2">
-                <td>No customers saved.</td>
-            </tr>
+        <tr>
+            <td>{{.FirstName}}</td>
+            <td>{{.LastName}}</td>
+        </tr>
+        {{else}}
+        <tr colspan="2">
+            <td>No customers saved.</td>
+        </tr>
         {{end}}
     </tbody>
 </table>
+{{end}}

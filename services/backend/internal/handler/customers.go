@@ -8,7 +8,6 @@ import (
 )
 
 type customersHandler struct {
-	tmplStore TemplateStore
 	dataStore ds.CustomerDatastore
 }
 
@@ -27,27 +26,8 @@ func (h *customersHandler) createCustomer(w http.ResponseWriter, r *http.Request
 	w.WriteHeader(http.StatusCreated)
 }
 
-func (h *customersHandler) listCustomers(w http.ResponseWriter, r *http.Request) {
-	tmpl, err := h.tmplStore.GetTemplates()
-	if err != nil {
-		handleInternalServerError(w, r, err)
-		return
-	}
-
-	customers, err := h.dataStore.GetAll()
-	if err != nil {
-		handleInternalServerError(w, r, err)
-		return
-	}
-
-	w.Header().Set("Content-Type", "text/html")
-	tmpl.ExecuteTemplate(w, "customers.go.tmpl", customers)
-}
-
 func (h *customersHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	switch {
-	case r.Method == http.MethodGet:
-		h.listCustomers(w, r)
 	case r.Method == http.MethodPost:
 		h.createCustomer(w, r)
 	default:
@@ -55,6 +35,6 @@ func (h *customersHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func NewCustomersHandler(tmplStore TemplateStore, dataStore ds.CustomerDatastore) http.Handler {
-	return &customersHandler{tmplStore: tmplStore, dataStore: dataStore}
+func NewCustomersHandler(dataStore ds.CustomerDatastore) http.Handler {
+	return &customersHandler{dataStore: dataStore}
 }

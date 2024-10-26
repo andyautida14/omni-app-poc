@@ -6,12 +6,12 @@ import (
 	"net/http"
 )
 
-type TemplateStore interface {
-	GetTemplates() (*template.Template, error)
+type TemplateParser interface {
+	ParseTemplates(...string) (*template.Template, error)
 }
 
 func handleInternalServerError(w http.ResponseWriter, _ *http.Request, err error) {
-	slog.Error("an unexpected error occured:", err)
+	slog.Error("an unexpected error occured:" + err.Error())
 	w.WriteHeader(http.StatusInternalServerError)
 	w.Write([]byte("internal server error"))
 }

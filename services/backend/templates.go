@@ -2,47 +2,42 @@ package main
 
 import (
 	"embed"
+	"fmt"
 	"html/template"
-	"path/filepath"
+	"io/fs"
+	"os"
 )
 
 //go:embed templates/*.go.tmpl
 var embeddedTemplates embed.FS
 
-type tmplStore struct {
-	tmplPathPattern string
-	tmplCache       *template.Template
+type tmplFs struct {
+	fs.FS
 }
 
-func (t *tmplStore) getEmbeddedTemplates() (*template.Template, error) {
-	if t.tmplCache == nil {
-		cache, err := template.ParseFS(embeddedTemplates, "templates/*")
+func (fs *tmplFs) ParseTemplates(names ...string) (*template.Template, error) {
+	filenames := make([]string, len(names))
+	for i, name := range names {
+		filenames[i] = name + ".go.tmpl"
+	}
+	return template.ParseFS(fs, filenames...)
+}
+
+func newTmplFs(tmplPath string) (*tmplFs, error) {
+	if tmplPath != "" {
+		fInfo, err := os.Stat(tmplPath)
 		if err != nil {
 			return nil, err
 		}
-		t.tmplCache = cache
-	}
-
-	return t.tmplCache, nil
-}
-
-func (t *tmplStore) getFsTemplates() (*template.Template, error) {
-	return template.ParseGlob(t.tmplPathPattern)
-}
-
-func (t *tmplStore) GetTemplates() (*template.Template, error) {
-	if t.tmplPathPattern != "" {
-		return t.getFsTemplates()
+		if !fInfo.IsDir() {
+			return nil, fmt.Errorf("template path %s is not a directory", tmplPath)
+		}
+		return &tmplFs{FS: os.DirFS(tmplPath)}, nil
 	} else {
-		return t.getEmbeddedTemplates()
+		tmplSubDir, err := fs.Sub(embeddedTemplates, "templates")
+		if err != nil {
+			return nil, err
+		}
+		return &tmplFs{FS: tmplSubDir}, nil
 	}
-}
-
-func newTmplStore(tmplPath string) *tmplStore {
-	pattern := ""
-	if tmplPath != "" {
-		pattern = filepath.Join(tmplPath, "*.go.tmpl")
-	}
-
-	return &tmplStore{tmplPathPattern: pattern}
 }
