@@ -7,41 +7,14 @@
         <title>OmniCRM</title>
 
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
-        <style>
-            :root {
-                font-family: Inter, sans-serif;
-                font-feature-settings:
-                    "liga" 1,
-                    "calt" 1; /* fix for Chrome */
-            }
-            @supports (font-variation-settings: normal) {
-                :root {
-                    font-family: InterVariable, sans-serif;
-                }
-            }
-        </style>
         <link
             rel="stylesheet"
             href="https://unpkg.com/franken-ui@1.1.0/dist/css/core.min.css"
         />
-
-        <script>
-            const htmlElement = document.documentElement;
-
-            if (
-                localStorage.getItem("mode") === "dark" ||
-                (!("mode" in localStorage) &&
-                    window.matchMedia("(prefers-color-scheme: dark)").matches)
-            ) {
-                htmlElement.classList.add("dark");
-            } else {
-                htmlElement.classList.remove("dark");
-            }
-
-            htmlElement.classList.add(
-                localStorage.getItem("theme") || "uk-theme-zinc",
-            );
-        </script>
+        <link
+            rel="stylesheet"
+            href="/static/styles/style.css"
+        />
 
         <script
             src="https://unpkg.com/htmx.org@2.0.3"
@@ -56,6 +29,7 @@
             src="https://unpkg.com/franken-ui@1.1.0/dist/js/icon.iife.js"
             type="module"
         ></script>
+        <script src="/static/js/theme.js"></script>
     </head>
     <body class="bg-background text-foreground">
         <div class="uk-container uk-margin-bottom">

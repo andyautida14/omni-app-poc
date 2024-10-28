@@ -10,6 +10,8 @@ import (
 	"github.com/sethvargo/go-envconfig"
 )
 
+const STATIC_URL_PREFIX = "/static/"
+
 var c ServiceConfig
 
 func main() {
@@ -31,24 +33,24 @@ func main() {
 	customerStore := ds.NewCustomerDS(conn.NewSession(nil))
 	customersH := handler.NewCustomersHandler(customerStore)
 
-	tmplParser, err := newTmplFs(c.TemplatePath, c.CacheTemplates)
+	tmplFs, err := newTmplFs(c.TemplatePath, c.CacheTemplates)
 	if err != nil {
 		log.Fatal(err)
 	}
-	homeH := handler.NewHomeHandler(tmplParser, customerStore)
+	homeH := handler.NewHomeHandler(tmplFs, customerStore)
 
-	// staticRootFs, err := getStaticRootFs(c.StaticPath)
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
+	staticFs, err := newStaticServer(STATIC_URL_PREFIX, c.StaticPath)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/healthcheck", func(w http.ResponseWriter, _ *http.Request) {
 		w.WriteHeader(http.StatusOK)
 	})
+	mux.Handle(STATIC_URL_PREFIX, staticFs)
 	mux.Handle("/customers", customersH)
 	mux.Handle("/customers/", customersH)
 	mux.Handle("/", homeH)
-	// mux.Handle("/", http.FileServer(staticRootFs))
 	http.ListenAndServe(":1337", mux)
 }

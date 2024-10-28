@@ -8,7 +8,7 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - customer-service-db:/var/llib/postgresql/data
+      - customer-service-db:/var/lib/postgresql/data
     healthcheck:
       test: pg_isready -U customer-service-user -d customer_service
       interval: 5s
