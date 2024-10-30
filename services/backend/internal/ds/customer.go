@@ -25,6 +25,8 @@ type customerDatastore struct {
 	session *dbr.Session
 }
 
+var customerDsInstances map[*dbr.Session]CustomerDatastore
+
 func (ds *customerDatastore) Create(c *Customer) error {
 	now := time.Now()
 	c.ID = uuid.New()
@@ -55,6 +57,10 @@ func (ds *customerDatastore) GetAll() ([]Customer, error) {
 	return customers, nil
 }
 
-func NewCustomerDS(session *dbr.Session) CustomerDatastore {
-	return &customerDatastore{session: session}
+func GetCustomerDS(session *dbr.Session) CustomerDatastore {
+	ds, ok := customerDsInstances[session]
+	if !ok {
+		ds = &customerDatastore{session: session}
+	}
+	return ds
 }

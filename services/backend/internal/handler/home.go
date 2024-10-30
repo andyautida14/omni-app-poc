@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/andyautida/omni-app-poc/services/backend/internal/ds"
+	"github.com/gocraft/dbr/v2"
 )
 
 type homeHandler struct {
@@ -31,8 +32,8 @@ func (h *homeHandler) getHome(w http.ResponseWriter, r *http.Request) {
 	tmpl.ExecuteTemplate(w, "shell", customers)
 }
 
-func NewHomeHandler(tmplParser TemplateParser, dataStore ds.CustomerDatastore) http.Handler {
-	h := &homeHandler{tmplParser: tmplParser, dataStore: dataStore}
+func NewHomeHandler(tmplParser TemplateParser, session *dbr.Session) http.Handler {
+	h := &homeHandler{tmplParser: tmplParser, dataStore: ds.GetCustomerDS(session)}
 	route := &routeHandler{handlers: map[string]http.HandlerFunc{
 		"GET": h.getHome,
 	}}

@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/andyautida/omni-app-poc/services/backend/internal/ds"
+	"github.com/gocraft/dbr/v2"
 )
 
 type customersHandler struct {
@@ -35,6 +36,6 @@ func (h *customersHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func NewCustomersHandler(dataStore ds.CustomerDatastore) http.Handler {
-	return &customersHandler{dataStore: dataStore}
+func NewCustomersHandler(_ TemplateParser, session *dbr.Session) http.Handler {
+	return &customersHandler{dataStore: ds.GetCustomerDS(session)}
 }
