@@ -1,37 +1,32 @@
-package main
+package db
 
 import (
-	"embed"
+	"io/fs"
 	"net/url"
 
 	"github.com/gocraft/dbr/v2"
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/postgres"
 	"github.com/golang-migrate/migrate/v4/source/iofs"
-
-	_ "github.com/lib/pq"
 )
 
-//go:embed migrations/*
-var migrationsDir embed.FS
-
-type db struct {
+type dbConn struct {
 	u *url.URL
 	*dbr.Connection
 }
 
-func (d *db) migrate() error {
+func (db *dbConn) Migrate(migrationsDir fs.FS) error {
 	migrationSource, err := iofs.New(migrationsDir, "migrations")
 	if err != nil {
 		return err
 	}
 
-	driver, err := postgres.WithInstance(d.DB, &postgres.Config{})
+	driver, err := postgres.WithInstance(db.DB, &postgres.Config{})
 	if err != nil {
 		return err
 	}
 
-	m, err := migrate.NewWithInstance("iofs", migrationSource, d.u.Path, driver)
+	m, err := migrate.NewWithInstance("iofs", migrationSource, db.u.Path, driver)
 	if err != nil {
 		return err
 	}
@@ -43,7 +38,7 @@ func (d *db) migrate() error {
 	return nil
 }
 
-func openDbConn(dbUrl string) (*db, error) {
+func NewConn(dbUrl string) (*dbConn, error) {
 	u, err := url.Parse(dbUrl)
 	if err != nil {
 		return nil, err
@@ -54,5 +49,5 @@ func openDbConn(dbUrl string) (*db, error) {
 		return nil, err
 	}
 
-	return &db{u: u, Connection: conn}, err
+	return &dbConn{u: u, Connection: conn}, err
 }

@@ -16,7 +16,9 @@ services:
       retries: 5
       start_period: 1s
   customer_service:
-    build: ./services/backend
+    build:
+      context: .
+      dockerfile: ./services/backend/Dockerfile
     environment:
       - DB_URL=postgres://customer-service-user:customer-service-password@customer_service_db:5432/customer_service?sslmode=disable
       - STATIC_PATH=/var/srv/static

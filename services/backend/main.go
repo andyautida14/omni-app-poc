@@ -2,11 +2,16 @@ package main
 
 import (
 	"context"
+	"embed"
 	"log"
 	"net/http"
 
+	"github.com/andyautida/omni-app-poc/lib/db"
 	"github.com/sethvargo/go-envconfig"
 )
+
+//go:embed migrations/*
+var migrationsDir embed.FS
 
 var c ServiceConfig
 
@@ -17,12 +22,12 @@ func main() {
 		log.Fatal(err)
 	}
 
-	conn, err := openDbConn(c.DbUrl)
+	conn, err := db.NewConn(c.DbUrl)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	if err := conn.migrate(); err != nil {
+	if err := conn.Migrate(migrationsDir); err != nil {
 		log.Fatal(err)
 	}
 

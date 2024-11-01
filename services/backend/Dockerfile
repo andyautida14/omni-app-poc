@@ -1,10 +1,15 @@
 FROM golang:1.23.2-alpine3.20 AS build
 
-WORKDIR /app
-COPY go.mod go.sum ./
+# Copy libraries (check the service's go.mod)
+WORKDIR /src/lib
+COPY lib/db ./db
+
+# Copy service
+WORKDIR /src/services/backend
+COPY services/backend/go.mod services/backend/go.sum ./
 RUN go mod download
-COPY . .
-RUN go build -o app .
+COPY services/backend .
+RUN go build -o /app/app .
 
 FROM alpine:3.20
 
