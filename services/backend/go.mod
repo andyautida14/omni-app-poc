@@ -1,6 +1,6 @@
 module github.com/andyautida/omni-app-poc/services/backend
 
-go 1.22.6
+go 1.23.2
 
 replace github.com/andyautida/omni-app-poc/lib/db => ../../lib/db
 

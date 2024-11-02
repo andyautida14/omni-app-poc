@@ -1,6 +1,6 @@
 module github.com/andyautida/omni-app-poc/lib/db
 
-go 1.22.6
+go 1.23.2
 
 require (
 	github.com/gocraft/dbr/v2 v2.7.7
