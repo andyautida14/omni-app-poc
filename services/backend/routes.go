@@ -22,7 +22,7 @@ func registerRoutes(mux *http.ServeMux, session *dbr.Session, c ServiceConfig) e
 
 	mux.HandleFunc("/healthcheck/", handler.HealthCheck)
 	mux.Handle(STATIC_URL_PREFIX, staticFs)
-	mux.Handle("/customers/", handler.NewCustomersHandler(tmplFs, session))
-	mux.Handle("/", handler.NewHomeHandler(tmplFs, session))
+	mux.Handle("/customers/{$}", handler.NewCustomersHandler(tmplFs, session))
+	mux.Handle("/{$}", handler.NewHomeHandler(tmplFs, session))
 	return nil
 }
