@@ -21,12 +21,3 @@ func getStaticRootFs(staticPath string) (http.FileSystem, error) {
 
 	return http.FS(staticFiles), nil
 }
-
-func newStaticServer(urlPrefix string, fsPath string) (http.Handler, error) {
-	rootFs, err := getStaticRootFs(fsPath)
-	if err != nil {
-		return nil, err
-	}
-
-	return http.StripPrefix(urlPrefix, http.FileServer(rootFs)), nil
-}

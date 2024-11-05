@@ -4,8 +4,11 @@ go 1.23.2
 
 replace github.com/andyautida/omni-app-poc/lib/db => ../../lib/db
 
+replace github.com/andyautida/omni-app-poc/lib/handler => ../../lib/handler
+
 require (
 	github.com/andyautida/omni-app-poc/lib/db v0.0.0-00010101000000-000000000000
+	github.com/andyautida/omni-app-poc/lib/handler v0.0.0-00010101000000-000000000000
 	github.com/gocraft/dbr/v2 v2.7.7
 	github.com/google/uuid v1.6.0
 	github.com/sethvargo/go-envconfig v1.1.0

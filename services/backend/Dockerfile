@@ -3,6 +3,7 @@ FROM golang:1.23.2-alpine3.20 AS build
 # Copy libraries (check the service's go.mod)
 WORKDIR /src/lib
 COPY lib/db ./db
+COPY lib/handler ./handler
 
 # Copy service
 WORKDIR /src/services/backend

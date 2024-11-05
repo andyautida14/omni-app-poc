@@ -3,26 +3,24 @@ package main
 import (
 	"net/http"
 
-	"github.com/andyautida/omni-app-poc/services/backend/internal/handler"
-	"github.com/gocraft/dbr/v2"
+	"github.com/andyautida/omni-app-poc/lib/handler"
+	"github.com/andyautida/omni-app-poc/services/backend/internal/handlers/home"
 )
 
 const STATIC_URL_PREFIX = "/static/"
 
-func registerRoutes(mux *http.ServeMux, session *dbr.Session, c ServiceConfig) error {
-	tmplFs, err := newTmplFs(c.TemplatePath, c.CacheTemplates)
-	if err != nil {
-		return err
-	}
+// Register HTTP routes and their handlers here
+func registerRoutes(
+	mux *http.ServeMux,
+	dsRegistry handler.DatastoreRegistry,
+	tmplFactory handler.TemplateFactory,
+	staticFs http.FileSystem,
+) {
+	staticHandler := http.StripPrefix(STATIC_URL_PREFIX, http.FileServer(staticFs))
+	mux.Handle(STATIC_URL_PREFIX, staticHandler)
 
-	staticFs, err := newStaticServer(STATIC_URL_PREFIX, c.StaticPath)
-	if err != nil {
-		return err
-	}
-
-	mux.HandleFunc("/healthcheck/", handler.HealthCheck)
-	mux.Handle(STATIC_URL_PREFIX, staticFs)
-	mux.Handle("/customers/{$}", handler.NewCustomersHandler(tmplFs, session))
-	mux.Handle("/{$}", handler.NewHomeHandler(tmplFs, session))
-	return nil
+	mux.HandleFunc("/healthcheck/{$}", handler.HealthCheck)
+	mux.Handle("/{$}", handler.NewRouteHandler(map[string]http.HandlerFunc{
+		"GET": home.GetHome(tmplFactory, dsRegistry),
+	}))
 }

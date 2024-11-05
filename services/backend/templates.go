@@ -25,6 +25,7 @@ func (fs *tmplFs) parseTemplates(names []string) (*template.Template, error) {
 	return template.ParseFS(fs, filenames...)
 }
 
+// TODO: remove
 func (fs *tmplFs) ParseTemplates(names []string, cacheKey string) (*template.Template, error) {
 	if !fs.isCacheEnabled {
 		return fs.parseTemplates(names)
@@ -46,6 +47,13 @@ func (fs *tmplFs) ParseTemplates(names []string, cacheKey string) (*template.Tem
 
 	fs.tmplCache[cacheKey] = tmpl
 	return tmpl, nil
+}
+
+// TODO: implement caching
+func (fs *tmplFs) CreateGetterFunc(names []string) func() (*template.Template, error) {
+	return func() (*template.Template, error) {
+		return fs.parseTemplates(names)
+	}
 }
 
 func newTmplFs(tmplPath string, isCacheEnabled bool) (*tmplFs, error) {

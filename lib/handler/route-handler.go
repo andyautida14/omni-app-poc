@@ -9,9 +9,13 @@ type routeHandler struct {
 func (h *routeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	f, ok := h.handlers[r.Method]
 	if !ok {
-		handleNotFound(w, r)
+		HandleNotFound(w, r)
 		return
 	}
 
 	f(w, r)
+}
+
+func NewRouteHandler(handlers map[string]http.HandlerFunc) http.Handler {
+	return &routeHandler{handlers: handlers}
 }

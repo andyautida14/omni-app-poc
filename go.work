@@ -2,4 +2,6 @@ go 1.23.2
 
 use ./lib/db
 
+use ./lib/handler
+
 use ./services/backend
