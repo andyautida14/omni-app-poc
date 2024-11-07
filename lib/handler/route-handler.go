@@ -16,6 +16,15 @@ func (h *routeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	f(w, r)
 }
 
-func NewRouteHandler(handlers map[string]http.HandlerFunc) http.Handler {
-	return &routeHandler{handlers: handlers}
+func NewInitRouteFunc(
+	tmplFactory TemplateFactory,
+	dsRegistry DatastoreRegistry,
+) func(Handlers) http.Handler {
+	return func(handlerFactories Handlers) http.Handler {
+		handlers := make(map[string]http.HandlerFunc)
+		for method, initHandler := range handlerFactories {
+			handlers[method] = initHandler(tmplFactory, dsRegistry)
+		}
+		return &routeHandler{handlers: handlers}
+	}
 }

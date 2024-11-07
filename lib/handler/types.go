@@ -1,6 +1,9 @@
 package handler
 
-import "html/template"
+import (
+	"html/template"
+	"net/http"
+)
 
 type (
 	TemplateFactory interface {
@@ -12,4 +15,8 @@ type (
 	DatastoreRegistry interface {
 		Get(string) (interface{}, error)
 	}
+
+	Handlers map[string]HandlerFuncInit
+
+	HandlerFuncInit func(TemplateFactory, DatastoreRegistry) http.HandlerFunc
 )

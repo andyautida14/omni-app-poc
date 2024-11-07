@@ -19,8 +19,10 @@ func registerRoutes(
 	staticHandler := http.StripPrefix(STATIC_URL_PREFIX, http.FileServer(staticFs))
 	mux.Handle(STATIC_URL_PREFIX, staticHandler)
 
+	initRoute := handler.NewInitRouteFunc(tmplFactory, dsRegistry)
+
 	mux.HandleFunc("/healthcheck/{$}", handler.HealthCheck)
-	mux.Handle("/{$}", handler.NewRouteHandler(map[string]http.HandlerFunc{
-		"GET": home.GetHome(tmplFactory, dsRegistry),
+	mux.Handle("/{$}", initRoute(handler.Handlers{
+		"GET": home.GetHome,
 	}))
 }
