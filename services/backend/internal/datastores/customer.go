@@ -3,7 +3,6 @@ package datastores
 import (
 	"time"
 
-	"github.com/andyautida/omni-app-poc/lib/db"
 	"github.com/gocraft/dbr/v2"
 	"github.com/google/uuid"
 )
@@ -35,7 +34,7 @@ func (ds *customerDatastore) Save(c *Customer) error {
 	return nil
 }
 
-func (ds *customerDatastore) RetrieveOne(id string) (*Customer, error) {
+func (ds *customerDatastore) GetById(id string) (*Customer, error) {
 	customer := &Customer{}
 	if err := ds.
 		Select("*").
@@ -48,14 +47,11 @@ func (ds *customerDatastore) RetrieveOne(id string) (*Customer, error) {
 	return customer, nil
 }
 
-func (ds *customerDatastore) RetrieveMany(
-	queryBuilder db.QueryBuilderFunc,
-) ([]Customer, error) {
+func (ds *customerDatastore) GetAll() ([]Customer, error) {
 	var customers []Customer
-	builder := ds.
+	if _, err := ds.
 		Select("*").
-		From("customers")
-	if _, err := queryBuilder(builder).
+		From("customers").
 		Load(&customers); err != nil {
 		return nil, err
 	}

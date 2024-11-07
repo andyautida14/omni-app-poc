@@ -3,13 +3,12 @@ package home
 import (
 	"net/http"
 
-	"github.com/andyautida/omni-app-poc/lib/db"
 	"github.com/andyautida/omni-app-poc/lib/handler"
 	"github.com/andyautida/omni-app-poc/services/backend/internal/datastores"
 )
 
-type customerManyRetriever interface {
-	RetrieveMany(db.QueryBuilderFunc) ([]datastores.Customer, error)
+type customerAllGetter interface {
+	GetAll() ([]datastores.Customer, error)
 }
 
 func GetHome(
@@ -20,7 +19,7 @@ func GetHome(
 		"shell",
 		"customers",
 	})
-	customerDs := handler.DSMust[customerManyRetriever](
+	customerDs := handler.DSMust[customerAllGetter](
 		dsRegistry.Get("customer"),
 	)
 
@@ -31,7 +30,7 @@ func GetHome(
 			return
 		}
 
-		customers, err := customerDs.RetrieveMany(db.IdentityQueryBuilder)
+		customers, err := customerDs.GetAll()
 		if err != nil {
 			handler.HandleInternalServerError(w, r, err)
 			return
