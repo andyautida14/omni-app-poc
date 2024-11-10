@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/andyautida/omni-app-poc/lib/handler"
+	"github.com/andyautida/omni-app-poc/services/backend/internal/handlers/customer"
 	"github.com/andyautida/omni-app-poc/services/backend/internal/handlers/home"
 )
 
@@ -22,6 +23,12 @@ func registerRoutes(
 	initRoute := handler.NewInitRouteFunc(tmplFactory, dsRegistry)
 
 	mux.HandleFunc("/healthcheck/{$}", handler.HealthCheck)
+	mux.Handle("/customers/new", initRoute(handler.Handlers{
+		"GET": customer.NewCustomer,
+	}))
+	mux.Handle("/customers/{$}", initRoute(handler.Handlers{
+		"POST": customer.SaveCustomer,
+	}))
 	mux.Handle("/{$}", initRoute(handler.Handlers{
 		"GET": home.GetHome,
 	}))

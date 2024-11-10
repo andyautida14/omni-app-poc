@@ -8,11 +8,11 @@ import (
 )
 
 type Customer struct {
-	ID        string    `json:"-" db:"id"`
-	FirstName string    `json:"firstName" db:"first_name"`
-	LastName  string    `json:"lastName" db:"last_name"`
-	CreatedAt time.Time `json:"-" db:"created_at"`
-	UpdatedAt time.Time `json:"-" db:"updated_at"`
+	ID        string    `db:"id"`
+	FirstName string    `db:"first_name"`
+	LastName  string    `db:"last_name"`
+	CreatedAt time.Time `db:"created_at"`
+	UpdatedAt time.Time `db:"updated_at"`
 }
 
 type customerDatastore struct {

@@ -9,3 +9,13 @@
         font-family: InterVariable, sans-serif;
     }
 }
+
+.custom-indicator {
+    display: none;
+}
+.htmx-request .custom-indicator {
+    display: inline;
+}
+.htmx-request.custom-indicator {
+    display: inline;
+}

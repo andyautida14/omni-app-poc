@@ -1,0 +1,53 @@
+{{ define "main" }}
+  <h2 class="uk-h2">New Customer</h2>
+  <form
+    class="uk-form-stacked uk-margin"
+    hx-post="/customers/"
+    hx-disabled-elt="#submit"
+  >
+    <div class="uk-margin">
+      <label class="uk-form-label" for="customer-first-name">
+        First Name
+      </label>
+      <div class="uk-form-controls">
+        <input
+          class="uk-input"
+          id="customer-first-name"
+          name="first-name"
+          type="text"
+        />
+      </div>
+    </div>
+    <div class="uk-margin">
+      <label class="uk-form-label" for="customer-last-name"> Last Name </label>
+      <div class="uk-form-controls">
+        <input
+          class="uk-input"
+          id="customer-last-name"
+          name="last-name"
+          type="text"
+        />
+      </div>
+    </div>
+    <div class="uk-margin uk-grid uk-grid-small">
+      <div class="uk-form-controls">
+        <button id="submit" class="uk-button uk-button-primary">
+          <span class="size-4 uk-margin-small-right custom-indicator">
+            <div uk-spinner="ratio: 0.5"></div>
+          </span>
+          Create
+        </button>
+      </div>
+      <div class="uk-form-controls">
+        <button
+          class="uk-button uk-button-default"
+          hx-get="/"
+          hx-push-url="true"
+          hx-target="#main"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  </form>
+{{ end }}

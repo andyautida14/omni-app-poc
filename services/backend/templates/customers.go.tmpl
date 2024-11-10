@@ -1,23 +1,32 @@
-{{define "main"}}
-<h2 class="uk-h2">Customers</h2>
-<table class="uk-table uk-table-hover">
+{{ define "main" }}
+  <h2 class="uk-h2">Customers</h2>
+  <a
+    class="uk-button uk-button-primary uk-margin"
+    hx-boost="true"
+    hx-get="/customers/new"
+    hx-push-url="true"
+    hx-target="#main"
+  >
+    Create New
+  </a>
+  <table class="uk-table uk-table-hover">
     <thead>
-        <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-        </tr>
+      <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+      </tr>
     </thead>
     <tbody>
-        {{range .}}
+      {{ range . }}
         <tr>
-            <td>{{.FirstName}}</td>
-            <td>{{.LastName}}</td>
+          <td>{{ .FirstName }}</td>
+          <td>{{ .LastName }}</td>
         </tr>
-        {{else}}
+      {{ else }}
         <tr colspan="2">
-            <td>No customers saved.</td>
+          <td>No customers saved.</td>
         </tr>
-        {{end}}
+      {{ end }}
     </tbody>
-</table>
-{{end}}
+  </table>
+{{ end }}
