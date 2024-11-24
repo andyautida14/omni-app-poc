@@ -19,3 +19,6 @@
 .htmx-request.custom-indicator {
     display: inline;
 }
+.clickable-row {
+    cursor: pointer;
+}

@@ -18,7 +18,13 @@
     </thead>
     <tbody>
       {{ range . }}
-        <tr>
+        <tr
+          class="clickable-row"
+          hx-get="/customers/{{ .ID }}"
+          hx-boost="true"
+          hx-push-url="true"
+          hx-target="#main"
+        >
           <td>{{ .FirstName }}</td>
           <td>{{ .LastName }}</td>
         </tr>

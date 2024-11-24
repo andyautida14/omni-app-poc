@@ -29,6 +29,9 @@ func registerRoutes(
 	mux.Handle("/customers/{$}", initRoute(handler.Handlers{
 		"POST": customer.SaveCustomer,
 	}))
+	mux.Handle("/customers/{id}/{$}", initRoute(handler.Handlers{
+		"GET": customer.GetDetails,
+	}))
 	mux.Handle("/{$}", initRoute(handler.Handlers{
 		"GET": home.GetHome,
 	}))
