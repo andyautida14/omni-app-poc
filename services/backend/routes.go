@@ -14,13 +14,13 @@ const STATIC_URL_PREFIX = "/static/"
 func registerRoutes(
 	mux *http.ServeMux,
 	dsRegistry handler.DatastoreRegistry,
-	tmplFactory handler.TemplateFactory,
+	tmplLoader handler.HtmxTemplateLoader,
 	staticFs http.FileSystem,
 ) {
 	staticHandler := http.StripPrefix(STATIC_URL_PREFIX, http.FileServer(staticFs))
 	mux.Handle(STATIC_URL_PREFIX, staticHandler)
 
-	initRoute := handler.NewInitRouteFunc(tmplFactory, dsRegistry)
+	initRoute := handler.NewInitRouteFunc(tmplLoader, dsRegistry)
 
 	mux.HandleFunc("/healthcheck/{$}", handler.HealthCheck)
 	mux.Handle("/customers/new", initRoute(handler.Handlers{

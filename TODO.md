@@ -8,10 +8,12 @@
 - [ ] Delete user with confirmation message
 
 ## Technical Functionality
-- [ ] HTMX Template (extends `*template.Template`, with method `ExecuteHtmxTemplate(w, r, name, data)`, determines template name from `HX-Request` header, supports caching and internal server error page rendering)
-- [ ] HTMX Template Factory (returns HTMX Template instead of a getter fuction)
+- [x] HTMX Template
+- [x] HTMX Template Factory
+- [ ] Unify lib package
 
 ## Distributions supported
 - [x] Web
-- [ ] Desktop native via webview
-- [ ] Android app
+- [ ] Desktop full native
+- [ ] Desktop shell app
+- [ ] Android shell app

@@ -12,36 +12,24 @@ type customerAllGetter interface {
 }
 
 func GetHome(
-	tmplFactory handler.TemplateFactory,
+	tmplLoader handler.HtmxTemplateLoader,
 	dsRegistry handler.DatastoreRegistry,
 ) http.HandlerFunc {
-	getTmpl := tmplFactory.CreateGetterFunc([]string{
+	tmpl := handler.TmplMust(tmplLoader.Load([]string{
 		"shell",
 		"customers",
-	})
+	}))
 	customerDs := handler.DSMust[customerAllGetter](
 		dsRegistry.Get("customer"),
 	)
 
 	return func(w http.ResponseWriter, r *http.Request) {
-		tmpl, err := getTmpl()
-		if err != nil {
-			handler.HandleInternalServerError(w, r, err)
-			return
-		}
-
 		customers, err := customerDs.GetAll()
 		if err != nil {
 			handler.HandleInternalServerError(w, r, err)
 			return
 		}
 
-		templateName := "shell"
-		if r.Header.Get("HX-Request") == "true" {
-			templateName = "main"
-		}
-
-		w.Header().Set("Content-Type", "text/html")
-		tmpl.ExecuteTemplate(w, templateName, customers)
+		tmpl.ExecuteHtmxTemplate(w, r, "main", customers)
 	}
 }

@@ -51,8 +51,8 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// create template factory
-	tmplFactory, err := handler.NewTmplFactory(tmplFs, c.TemplateCache)
+	// create template loader
+	tmplLoader, err := handler.NewHtmxTmplLoader(tmplFs, c.TemplateCache)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -65,7 +65,7 @@ func main() {
 
 	// create server and register routes
 	mux := http.NewServeMux()
-	registerRoutes(mux, dsRegistry, tmplFactory, staticFs)
+	registerRoutes(mux, dsRegistry, tmplLoader, staticFs)
 
 	// run server
 	if err := http.ListenAndServe(":1337", mux); err != nil {

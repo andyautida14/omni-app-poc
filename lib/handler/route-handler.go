@@ -17,13 +17,13 @@ func (h *routeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func NewInitRouteFunc(
-	tmplFactory TemplateFactory,
+	tmplLoader HtmxTemplateLoader,
 	dsRegistry DatastoreRegistry,
 ) func(Handlers) http.Handler {
 	return func(handlerFactories Handlers) http.Handler {
 		handlers := make(map[string]http.HandlerFunc)
 		for method, initHandler := range handlerFactories {
-			handlers[method] = initHandler(tmplFactory, dsRegistry)
+			handlers[method] = initHandler(tmplLoader, dsRegistry)
 		}
 		return &routeHandler{handlers: handlers}
 	}

@@ -59,6 +59,13 @@ func HandleNotFound(w http.ResponseWriter, _ *http.Request) {
 	w.Write([]byte("not found"))
 }
 
+func TmplMust(tmpl *HtmxTemplate, err error) *HtmxTemplate {
+	if err != nil {
+		log.Fatal(err)
+	}
+	return tmpl
+}
+
 func DSMust[T any](ds interface{}, err error) T {
 	if err != nil {
 		log.Fatalf("Datastore retrieval error: " + err.Error())

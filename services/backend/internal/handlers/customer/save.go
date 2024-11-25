@@ -12,7 +12,7 @@ type customerSaver interface {
 }
 
 func SaveCustomer(
-	_ handler.TemplateFactory,
+	_ handler.HtmxTemplateLoader,
 	dsRegistry handler.DatastoreRegistry,
 ) http.HandlerFunc {
 	customerDs := handler.DSMust[customerSaver](

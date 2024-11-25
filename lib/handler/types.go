@@ -1,16 +1,13 @@
 package handler
 
 import (
-	"html/template"
 	"net/http"
 )
 
 type (
-	TemplateFactory interface {
-		CreateGetterFunc([]string) TemplateGetterFunc
+	HtmxTemplateLoader interface {
+		Load([]string) (*HtmxTemplate, error)
 	}
-
-	TemplateGetterFunc func() (*template.Template, error)
 
 	DatastoreRegistry interface {
 		Get(string) (interface{}, error)
@@ -18,5 +15,5 @@ type (
 
 	Handlers map[string]HandlerFuncInit
 
-	HandlerFuncInit func(TemplateFactory, DatastoreRegistry) http.HandlerFunc
+	HandlerFuncInit func(HtmxTemplateLoader, DatastoreRegistry) http.HandlerFunc
 )
