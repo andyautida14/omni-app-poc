@@ -1,10 +1,17 @@
 {{ define "main" }}
-  <h2 class="uk-h2">New Customer</h2>
+  <h2 class="uk-h2">{{ if . }}Edit{{ else }}New{{ end }} Customer</h2>
   <form
     class="uk-form-stacked uk-margin"
-    hx-post="/customers/"
+    {{ if . }}
+      hx-put="/customers/"
+    {{ else }}
+      hx-post="/customers/"
+    {{ end }}
     hx-disabled-elt="#submit"
   >
+    {{ if . }}
+      <input type="hidden" name="id" value="{{ .ID }}" />
+    {{ end }}
     <div class="uk-margin">
       <label class="uk-form-label" for="customer-first-name">
         First Name
@@ -15,6 +22,9 @@
           id="customer-first-name"
           name="first-name"
           type="text"
+          {{ if . }}
+            value="{{ .FirstName }}"
+          {{ end }}
         />
       </div>
     </div>
@@ -26,6 +36,9 @@
           id="customer-last-name"
           name="last-name"
           type="text"
+          {{ if . }}
+            value="{{ .LastName }}"
+          {{ end }}
         />
       </div>
     </div>
@@ -35,16 +48,15 @@
           <span class="size-4 uk-margin-small-right custom-indicator">
             <div uk-spinner="ratio: 0.5"></div>
           </span>
-          Create
+          {{ if . }}
+            Update
+          {{ else }}
+            Create
+          {{ end }}
         </button>
       </div>
       <div class="uk-form-controls">
-        <button
-          class="uk-button uk-button-default"
-          hx-get="/"
-          hx-push-url="true"
-          hx-target="#main"
-        >
+        <button class="uk-button uk-button-default" onclick="history.back()">
           Cancel
         </button>
       </div>

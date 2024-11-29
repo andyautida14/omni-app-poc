@@ -58,6 +58,29 @@ func (ds *customerDatastore) GetAll() ([]Customer, error) {
 	return customers, nil
 }
 
+func (ds *customerDatastore) UpdateOne(c *Customer) error {
+	now := time.Now()
+	res, err := ds.
+		Update("customers").
+		Set("first_name", c.FirstName).
+		Set("last_name", c.LastName).
+		Set("updated_at", now).
+		Where("id = ?", c.ID).
+		Exec()
+	if err != nil {
+		return err
+	}
+	count, err := res.RowsAffected()
+	if err != nil {
+		return err
+	}
+	if count < 1 {
+		return dbr.ErrNotFound
+	}
+	c.UpdatedAt = now
+	return nil
+}
+
 func NewCustomerDS(session *dbr.Session) func() (string, interface{}) {
 	return func() (string, interface{}) {
 		return "customer", &customerDatastore{Session: session}

@@ -1,21 +1,22 @@
 package customer
 
 import (
+	"encoding/json"
 	"net/http"
 
 	"github.com/andyautida/omni-app-poc/lib/handler"
 	"github.com/andyautida/omni-app-poc/services/backend/internal/datastores"
 )
 
-type customerSaver interface {
-	Save(*datastores.Customer) error
+type customerUpdater interface {
+	UpdateOne(*datastores.Customer) error
 }
 
-func SaveCustomer(
+func UpdateCustomer(
 	_ handler.HtmxTemplateLoader,
 	dsRegistry handler.DatastoreRegistry,
 ) http.HandlerFunc {
-	customerDs := handler.DSMust[customerSaver](
+	customerDs := handler.DSMust[customerUpdater](
 		dsRegistry.Get("customer"),
 	)
 
@@ -26,16 +27,24 @@ func SaveCustomer(
 		}
 
 		customer := &datastores.Customer{
+			ID:        r.FormValue("id"),
 			FirstName: r.FormValue("first-name"),
 			LastName:  r.FormValue("last-name"),
 		}
 
-		if err := customerDs.Save(customer); err != nil {
+		if err := customerDs.UpdateOne(customer); err != nil {
 			handler.HandleInternalServerError(w, r, err)
 			return
 		}
 
-		w.Header().Set("HX-Location", `{"path":"/","target":"#main"}`)
-		w.WriteHeader(http.StatusCreated)
+		location, err := json.Marshal(map[string]string{
+			"path":   "/customers/" + customer.ID + "/",
+			"target": "#main",
+		})
+		if err != nil {
+			handler.HandleInternalServerError(w, r, err)
+		}
+		w.Header().Set("HX-Location", string(location))
+		w.WriteHeader(http.StatusOK)
 	}
 }
