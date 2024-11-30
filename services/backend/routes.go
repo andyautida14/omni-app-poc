@@ -34,10 +34,10 @@ func registerRoutes(
 		"PUT":  customer.UpdateCustomer,
 	}))
 	mux.Handle("/customers/{id}/{$}", initRoute(handler.Handlers{
-		"GET": customer.GetDetails,
+		"GET": customer.Details("show"),
 	}))
 	mux.Handle("/customers/{id}/edit/{$}", initRoute(handler.Handlers{
-		"GET": customer.EditDetails,
+		"GET": customer.Details("edit"),
 	}))
 	mux.Handle("/{$}", initRoute(handler.Handlers{
 		"GET": home.GetHome,

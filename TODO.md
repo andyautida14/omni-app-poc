@@ -10,7 +10,7 @@
 ## Technical Functionality
 - [x] HTMX Template
 - [x] HTMX Template Factory
-- [ ] Refactor customer details page by supporting both showing and editing details
+- [x] Refactor customer details page by supporting both showing and editing details
 - [x] Create utility function for a handler that only renders a template with nil data
 - [ ] Unify lib package
 
