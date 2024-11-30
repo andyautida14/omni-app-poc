@@ -24,7 +24,10 @@ func registerRoutes(
 
 	mux.HandleFunc("/healthcheck/{$}", handler.HealthCheck)
 	mux.Handle("/customers/new", initRoute(handler.Handlers{
-		"GET": customer.NewCustomer,
+		"GET": handler.RenderTemplate("main", []string{
+			"shell",
+			"customer-form",
+		}),
 	}))
 	mux.Handle("/customers/{$}", initRoute(handler.Handlers{
 		"POST": customer.SaveCustomer,

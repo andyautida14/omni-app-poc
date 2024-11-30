@@ -11,7 +11,7 @@
 - [x] HTMX Template
 - [x] HTMX Template Factory
 - [ ] Refactor customer details page by supporting both showing and editing details
-- [ ] Create utility function for a handler that only renders a template with nil data
+- [x] Create utility function for a handler that only renders a template with nil data
 - [ ] Unify lib package
 
 ## Distributions supported

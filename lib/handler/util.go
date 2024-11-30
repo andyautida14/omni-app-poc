@@ -59,6 +59,16 @@ func HandleNotFound(w http.ResponseWriter, _ *http.Request) {
 	w.Write([]byte("not found"))
 }
 
+func RenderTemplate(templateName string, templateFiles []string) HandlerFuncInit {
+	return func(tmplLoader HtmxTemplateLoader, _ DatastoreRegistry) http.HandlerFunc {
+		tmpl := TmplMust(tmplLoader.Load(templateFiles))
+
+		return func(w http.ResponseWriter, r *http.Request) {
+			tmpl.ExecuteHtmxTemplate(w, r, templateName, nil)
+		}
+	}
+}
+
 func TmplMust(tmpl *HtmxTemplate, err error) *HtmxTemplate {
 	if err != nil {
 		log.Fatal(err)
