@@ -34,7 +34,8 @@ func registerRoutes(
 		"PUT":  customer.UpdateCustomer,
 	}))
 	mux.Handle("/customers/{id}/{$}", initRoute(handler.Handlers{
-		"GET": customer.Details("show"),
+		"GET":    customer.Details("show"),
+		"DELETE": customer.DeleteCustomer,
 	}))
 	mux.Handle("/customers/{id}/edit/{$}", initRoute(handler.Handlers{
 		"GET": customer.Details("edit"),

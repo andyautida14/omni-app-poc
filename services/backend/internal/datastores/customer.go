@@ -81,6 +81,13 @@ func (ds *customerDatastore) UpdateOne(c *Customer) error {
 	return nil
 }
 
+func (ds *customerDatastore) Delete(id string) error {
+	_, err := ds.DeleteFrom("customers").
+		Where("id = ?", id).
+		Exec()
+	return err
+}
+
 func NewCustomerDS(session *dbr.Session) func() (string, interface{}) {
 	return func() (string, interface{}) {
 		return "customer", &customerDatastore{Session: session}

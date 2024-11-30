@@ -1,14 +1,52 @@
 {{ define "main" }}
-  <h2 class="uk-h2 uk-margin-bottom">Customer</h2>
-  <a
-    class="uk-button uk-button-default uk-margin-bottom"
-    hx-boost="true"
-    hx-get="/customers/{{ .ID }}/edit"
-    hx-push-url="true"
-    hx-target="#main"
-  >
-    Edit
-  </a>
+  <h2 class="uk-h2">Customer</h2>
+  <p class="uk-margin">
+    <a
+      class="uk-button uk-button-secondary"
+      hx-boost="true"
+      hx-get="/customers/{{ .ID }}/edit"
+      hx-push-url="true"
+      hx-target="#main"
+    >
+      Edit
+    </a>
+    <button
+      type="button"
+      class="uk-button uk-button-danger"
+      uk-toggle="target: #confirm-deletion"
+    >
+      Delete
+    </button>
+  </p>
+
+  <div id="confirm-deletion" class="uk-flex-top" uk-modal>
+    <div class="uk-modal-body uk-margin-auto-vertical uk-modal-dialog">
+      <button class="uk-modal-close-default" type="button" uk-close></button>
+      <h2 class="uk-modal-title">Confirm Deletion</h2>
+      <p class="uk-margin">
+        Are you sure you want to delete customer
+        {{ .FirstName }}
+        {{ .LastName }}?
+      </p>
+      <p class="uk-text-right">
+        <button
+          type="button"
+          class="uk-modal-close uk-button uk-button-default"
+        >
+          Cancel
+        </button>
+        <button
+          id="delete-confirm"
+          class="uk-modal-close uk-button uk-button-danger"
+          type="button"
+          hx-delete="/customers/{{ .ID }}/"
+        >
+          Yes
+        </button>
+      </p>
+    </div>
+  </div>
+
   <table class="uk-table uk-table-hover">
     <tr>
       <td>First Name</td>

@@ -5,13 +5,17 @@
 - [x] Customer details page
 - [x] Customer not found page
 - [x] Edit customer info
-- [ ] Delete user with confirmation message
+- [x] Delete user with confirmation message
+- [ ] Show action notifications
 
 ## Technical Functionality
 - [x] HTMX Template
 - [x] HTMX Template Factory
 - [x] Refactor customer details page by supporting both showing and editing details
 - [x] Create utility function for a handler that only renders a template with nil data
+- [ ] Return notification content via response body (for save, delete, update)
+- [ ] Create utility function for HX-Location response header
+- [ ] Move main/entrypoint functions to cli/
 - [ ] Unify lib package
 
 ## Distributions supported
