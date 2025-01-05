@@ -36,6 +36,7 @@ func SaveCustomer(
 		}
 
 		w.Header().Set("HX-Location", `{"path":"/","target":"#main"}`)
+		w.Header().Set("X-Notif-Msg", "Customer has been saved successfully.")
 		w.WriteHeader(http.StatusCreated)
 	}
 }

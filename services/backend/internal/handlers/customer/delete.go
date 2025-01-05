@@ -26,6 +26,7 @@ func DeleteCustomer(
 		}
 
 		w.Header().Set("HX-Location", `{"path":"/","target":"#main"}`)
-		w.WriteHeader(http.StatusNoContent)
+		w.Header().Set("X-Notif-Msg", "Customer has been deleted successfully.")
+		w.WriteHeader(http.StatusOK)
 	}
 }

@@ -45,6 +45,8 @@ func UpdateCustomer(
 			handler.HandleInternalServerError(w, r, err)
 		}
 		w.Header().Set("HX-Location", string(location))
+		w.Header().Set("X-Notif-Msg", "Customer has been updated successfully.")
+		w.Header().Set("X-Notif-Status", "danger")
 		w.WriteHeader(http.StatusOK)
 	}
 }
